@@ -18,6 +18,10 @@
         {% csrf_token %}
         <input type="submit" value="로그아웃" class="btn btn-warning">
       </form>
+      <form action="{% url 'accounts:delete' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="회원 탈퇴" class="btn btn-danger">
+      </form>
     {% else %}
       <a href="{% url 'accounts:login' %}" class="btn btn-secondary">로그인</a>
       <a href="{% url 'accounts:signup' %}" class="btn btn-primary">회원가입</a>

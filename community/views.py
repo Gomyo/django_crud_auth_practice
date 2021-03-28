@@ -37,3 +37,28 @@ def detail(request, review_pk):
         'review': review,
     }
     return render(request, 'community/detail.html', context)
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def update(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('community:detail', review.pk)
+    else:
+        form = ReviewForm(instance=review)
+    context = {
+        'form': form,
+        'review': review,
+    }
+    return render(request, 'community/form.html', context)
+
+@require_POST
+def delete(request, review_pk):
+    if request.user.is_authenticated:
+        review = get_object_or_404(Review, pk=review_pk)
+        if review.user == request.user:
+            review.delete()
+    return redirect('community:index')

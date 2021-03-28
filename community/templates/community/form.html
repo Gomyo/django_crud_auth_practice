@@ -2,10 +2,26 @@
 {% load bootstrap5 %}
 
 {% block content %}
-  <h1>CREATE PAGE</h1>
+  {% if request.resolver_match.url_name == 'create' %}
+    <h1>CREATE PAGE</h1>
+  {% else %}
+    <h1>UPDATE PAGE</h1>
+  {% endif %}
   <form action="" method="POST">
     {% csrf_token %}
     {% bootstrap_form form %}
-    <input type="submit" value="글쓰기">
+
+  {% if request.resolver_match.url_name == 'create' %}
+    <input type="submit" value="글 작성" class="btn btn-primary">
+  {% else %}
+    <input type="submit" value="글 수정" class="btn btn-primary">
+  {% endif %}
   </form>
+
+  {% if request.resolver_match.url_name == 'create' %}
+    <a href="{% url 'community:index' %}" class="btn btn-secondary">목록으로</a>
+  {% else %}
+    <a href="{% url 'community:detail' review.pk %}" class="btn btn-secondary">수정 취소</a>
+  {% endif %}
+
 {% endblock content %}
