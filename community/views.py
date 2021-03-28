@@ -11,7 +11,7 @@ def index(request):
     context = {
         'reviews': reviews,
     }
-    return render(request, 'community/index.html')
+    return render(request, 'community/index.html', context)
 
 @login_required
 @require_http_methods(['GET', 'POST'])
@@ -29,3 +29,11 @@ def create(request):
         'form': form,
     }
     return render(request, 'community/form.html', context)
+
+@require_safe
+def detail(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    context = {
+        'review': review,
+    }
+    return render(request, 'community/detail.html', context)

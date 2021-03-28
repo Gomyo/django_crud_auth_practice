@@ -5,4 +5,11 @@
   <hr>
   <a href="{% url 'community:create' %}">[새 리뷰 작성하기]</a>
   <hr>
+  {% for review in reviews %}
+    <p>{{ review.pk }}번째 리뷰</p>
+    <p>{{ review.title }}</p>
+    <p>영화 : {{ review.movie_title }}</p>
+    <a href="{% url 'community:detail' review.pk %}">자세히</a>
+    <hr>
+  {% endfor %}
 {% endblock content %}

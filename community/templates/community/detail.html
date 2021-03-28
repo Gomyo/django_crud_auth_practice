@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <h1>DETAIL PAGE</h1>
+  <hr>
+  <p>{{ review.pk }} 번째 리뷰</p>
+  <p>리뷰 제목 : {{ review.title }}</p>
+  <p>영화 제목 : {{ review.movie_title }}</p>
+  <p>영화 등급 : {{ review.rank }}</p>
+  <p>영화 내용 : {{ review.content }}</p>
+  <p>리뷰작성시간 : {{ review.created_at }}</p>
+  <p>리뷰수정시간 : {{ review.updated_at }}</p>
+  <p>리뷰 작성자 : {{ review.user_id }}</p>
+  <hr>
+  <a href="" class="btn btn-info">수정하기</a>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제하기" class="btn btn-danger">
+  </form>
+  <hr>
+  <a href="{% url 'community:index' %}">목록으로</a>
+{% endblock content %}
