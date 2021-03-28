@@ -12,6 +12,16 @@
 <body>
   {% include 'nav.html' %}
   <div class="container">
+    {% if request.user.is_authenticated %}
+      <h3>안녕, {{ request.user }}!</h3>
+      <form action="#" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="로그아웃" class="btn btn-warning">
+      </form>
+    {% else %}
+      <a href="" class="btn btn-secondary">로그인</a>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-primary">회원가입</a>
+    {% endif %}
     {% block content %}
     {% endblock content %}
   </div>

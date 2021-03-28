@@ -1,3 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import ReviewForm, CommentForm
+from .models import Review, Comment
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST, require_http_methods, require_safe
 
 # Create your views here.
+@require_safe
+def index(request):
+    reviews = Review.objects.order_by('-pk')
+    context = {
+        'reviews': reviews,
+    }
+    return render(request, 'community/index.html')
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def create(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
+            return redirect('community:detail', review.pk)
+    else:
+        form = ReviewForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'community/form.html', context)
