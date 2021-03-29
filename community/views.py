@@ -59,6 +59,5 @@ def update(request, review_pk):
 def delete(request, review_pk):
     if request.user.is_authenticated:
         review = get_object_or_404(Review, pk=review_pk)
-        if review.user == request.user:
-            review.delete()
+        review.delete()
     return redirect('community:index')
