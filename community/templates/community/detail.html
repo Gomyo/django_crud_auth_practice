@@ -22,5 +22,25 @@
     </form>
     <hr>
   {% endif %}
+  {% if comments %}
+    <p>{{ comments|length }} 개의 댓글이 있습니다.</p>
+  {% endif %}
+  <hr>
+  <ul>
+    {% for comment in comments %}
+      <li>
+        {{ comment.user }}의 댓글
+        {{ comment }}
+      </li>
+      <hr>
+    {% empty %}
+      <p>아직 댓글이 없습니다.</p>
+    {% endfor %}
+  </ul>
+  <form action="{% url 'community:create_comment' review.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    <input type="submit" value="댓글 작성" class="btn btn-info">
+  </form>
   <a href="{% url 'community:index' %}">목록으로</a>
 {% endblock content %}

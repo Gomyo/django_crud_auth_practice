@@ -3,6 +3,7 @@ from .forms import ReviewForm, CommentForm
 from .models import Review, Comment
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods, require_safe
+from django.http import HttpResponse
 
 # Create your views here.
 @require_safe
@@ -33,8 +34,12 @@ def create(request):
 @require_safe
 def detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
+    comments = review.comments.all()
+    comment_form = CommentForm()
     context = {
         'review': review,
+        'comments': comments,
+        'comment_form': comment_form,
     }
     return render(request, 'community/detail.html', context)
 
@@ -65,3 +70,21 @@ def delete(request, review_pk):
         if review.user == request.user:
             review.delete()
     return redirect('community:index')
+
+@require_POST
+def create_comment(request, review_pk):
+    if request.user.is_authenticated:
+        review = get_object_or_404(Review, pk=review_pk)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            comment.review = review
+            comment.save()
+            return redirect('community:detail', review.pk)
+        context = {
+            'comment_form': comment_form,
+            'review': review,
+        }
+        return render(request, 'community/detail.html', context)
+    return HttpResponse(status=401)
