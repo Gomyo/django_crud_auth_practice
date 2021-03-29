@@ -31,10 +31,14 @@
       <li>
         {{ comment.user }}의 댓글
         {{ comment }}
-      </li>
+        <form action="{% url 'community:delete_comment' review.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="댓글 삭제">
+        </form>
       <hr>
-    {% empty %}
-      <p>아직 댓글이 없습니다.</p>
+      </li>
+      {% empty %}
+        <p>아직 댓글이 없습니다.</p>
     {% endfor %}
   </ul>
   <form action="{% url 'community:create_comment' review.pk %}" method="POST">

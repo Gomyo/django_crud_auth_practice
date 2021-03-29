@@ -88,3 +88,12 @@ def create_comment(request, review_pk):
         }
         return render(request, 'community/detail.html', context)
     return HttpResponse(status=401)
+
+@require_POST
+def delete_comment(request, review_pk, comment_pk):
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        if request.user == comment.user:
+            comment.delete()
+        return redirect('community:detail', review_pk)
+    return HttpResponse(status=401)
