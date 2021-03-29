@@ -42,13 +42,16 @@ def detail(request, review_pk):
 @require_http_methods(['GET', 'POST'])
 def update(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
-    if request.method == 'POST':
-        form = ReviewForm(request.POST, instance=review)
-        if form.is_valid():
-            form.save()
-            return redirect('community:detail', review.pk)
+    if review.user == request.user:
+        if request.method == 'POST':
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                return redirect('community:detail', review.pk)
+        else:
+            form = ReviewForm(instance=review)
     else:
-        form = ReviewForm(instance=review)
+        return redirect('community:index')
     context = {
         'form': form,
         'review': review,
@@ -59,5 +62,6 @@ def update(request, review_pk):
 def delete(request, review_pk):
     if request.user.is_authenticated:
         review = get_object_or_404(Review, pk=review_pk)
-        review.delete()
+        if review.user == request.user:
+            review.delete()
     return redirect('community:index')
