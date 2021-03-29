@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
+{% load humanize %}
 
 {% block content %}
   <h1>DETAIL PAGE</h1>
@@ -9,8 +10,8 @@
   <p>영화 제목 : {{ review.movie_title }}</p>
   <p>영화 등급 : {{ review.rank }}</p>
   <p>영화 내용 : {{ review.content }}</p>
-  <p>리뷰작성시간 : {{ review.created_at }}</p>
-  <p>리뷰수정시간 : {{ review.updated_at }}</p>
+  <p>리뷰작성시간 : {{ review.created_at|naturalday }}</p>
+  <p>리뷰수정시간 : {{ review.updated_at|naturaltime }}</p>
   <p>리뷰 작성자 : {{ review.user_id }}</p>
   <hr>
   {% if review.user_id == request.user.pk %}
