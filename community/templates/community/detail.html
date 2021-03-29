@@ -23,9 +23,19 @@
     <hr>
   {% endif %}
   {% if comments %}
+    <h4>댓글 목록</h4>
     <p>{{ comments|length }} 개의 댓글이 있습니다.</p>
   {% endif %}
   <hr>
+  <!-- 댓글 삭제 시 해당 댓글 작성자가 아닐 경우 에러 메세지 -->
+  {% if messages %}
+      {% for message in messages %}
+        <p{% if message.tags %} role="alert" class="alert alert-danger {{ message.tags }}" {% endif %}>
+          {{ message }}
+        </p>
+      {% endfor %}
+  {% endif %}
+  <!-- 댓글 출력부 -->
   <ul>
     {% for comment in comments %}
       <li>
@@ -41,6 +51,7 @@
         <p>아직 댓글이 없습니다.</p>
     {% endfor %}
   </ul>
+  <!-- 댓글 작성부 -->
   <form action="{% url 'community:create_comment' review.pk %}" method="POST">
     {% csrf_token %}
     {% bootstrap_form comment_form %}

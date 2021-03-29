@@ -4,6 +4,7 @@ from .models import Review, Comment
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods, require_safe
 from django.http import HttpResponse
+from django.contrib import messages
 
 # Create your views here.
 @require_safe
@@ -95,5 +96,7 @@ def delete_comment(request, review_pk, comment_pk):
         comment = get_object_or_404(Comment, pk=comment_pk)
         if request.user == comment.user:
             comment.delete()
+        else:
+            messages.add_message(request, messages.WARNING, '해당 댓글의 작성자만 삭제가 가능합니다.')
         return redirect('community:detail', review_pk)
     return HttpResponse(status=401)
